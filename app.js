@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./routes/mhs-routes.js'); // memanggil routes
 const app = express();
-const port = 8000;
+const port = 3000;
 
 // config bodyParser
 app.use(bodyParser.json());
