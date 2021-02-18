@@ -8,6 +8,9 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
 
+// Tell express where to serve static files from
+app.use(express.static(__dirname + '/public'));
+
 // memanggil fungsi app pada routes
 routes(app);
 

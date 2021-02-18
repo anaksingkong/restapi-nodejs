@@ -26,4 +26,12 @@ module.exports = function(app){
 	// menghapus data mahasiswa
 	app.route('/delete-data/:id')
 		.post(jsonku.hapusData)
+
+	// menampilkan data matakuliah
+	app.route('/tampil-matakuliah')
+		.get(jsonku.jsonGroup);
+
+	// menampilkan halaman html
+	app.route('/laporan')
+		.get(jsonku.laporan);
 };

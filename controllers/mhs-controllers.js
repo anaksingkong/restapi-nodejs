@@ -52,7 +52,7 @@ exports.tambahData = function(req, res){
 // mengupdate/merubah data mahasiswa
 // mencoba menggunakan arrow function
 exports.rubahData = ((req, res)=>{
-	const id = req.body.id;
+	const id = req.body.id_mahasiswa;
 	const nim = req.body.nim;
 	const nama = req.body.nama;
 	const jurusan = req.body.jurusan;
@@ -70,7 +70,7 @@ exports.rubahData = ((req, res)=>{
 
 // menghapus data mahasiswa
 exports.hapusData = ((req, res)=>{
-	const id = req.params.id;
+	const id = req.params.id_mahasiswa;
 
 	connection.query('DELETE FROM mahasiswa WHERE id_mahasiswa = ?', [id], (error, rows, fields)=>{
 		if (error) {
@@ -80,3 +80,19 @@ exports.hapusData = ((req, res)=>{
 		}
 	});
 });
+
+// menampilkan hasil dari nested json
+exports.jsonGroup = function(req, res){
+	connection.query('SELECT mahasiswa.id_mahasiswa, mahasiswa.nim, mahasiswa.nama, mahasiswa.jurusan, matakuliah.matakuliah, matakuliah.sks FROM krs JOIN matakuliah JOIN mahasiswa WHERE krs.id_mahasiswa = mahasiswa.id_mahasiswa AND krs.id_matakuliah = matakuliah.id_matakuliah ORDER BY mahasiswa.id_mahasiswa ', (error, rows, fields)=>{
+		if (error) {
+			console.log(error);
+		} else {
+			response.nestedJson(rows, res);
+		}
+	});
+};
+
+// menapilkan halaman html
+exports.laporan = function(req, res){
+	res.sendfile('index1.html');
+};

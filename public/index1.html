@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Belajar AJAX dengan JQuery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+</head>
+<body>
+    
+    <canvas id="myChart" width="200" height="90"></canvas>
+    
+    
+    <script>
+
+        // var nama = new Array();
+        // var jurusan = new Array();
+
+        let content;
+        let myChart;
+        const nama = [];
+        const jurusan = [];
+        const id = [];
+        const nim = [];
+        
+
+        var url = "http://localhost:3000/display-all";
+        $.get(url, function(data, status){
+
+            $.each(data.data, (index, rows)=>{
+                
+                nama.push(rows.nama);
+                jurusan.push(rows.jurusan);
+                id.push(rows.id_mahasiswa);
+                nim.push(rows.nim);
+
+            });  
+
+            console.log(nama);
+            console.log(jurusan);
+            console.log(id);
+            console.log(nim)
+
+            myChart.update();
+
+        });
+
+        // Chart Data
+        data = {
+        labels: nama,
+        datasets: [
+                {
+                    label: ["Try Chart.Js"],
+                    data: id,
+                }
+            ]
+        };
+
+        context = document.getElementById('myChart').getContext('2d');
+        myChart = new Chart(context,{
+        type: 'bar',
+        data: data,
+        animation:{ 
+            animateScale:true
+        }
+        });
+
+        
+    </script>
+</body>
+</html>
