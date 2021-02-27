@@ -18,7 +18,7 @@ exports.registrasi = ((req, res)=>{
     }
  
     // mengecek email apakah sudah terdaftar atau belum
-    let query = 'SELECT email FROM ?? WHERE ??'; // ambilkan saya data dari tabel user yang key n value nya adalah email
+    let query = 'SELECT email FROM ?? WHERE ??=?'; // ambilkan saya data dari tabel user yang key n value nya adalah email
     let table = ['user', 'email', post.email];
  
     query = mysql.format(query, table); // menjalankan varible query dan table
@@ -45,7 +45,7 @@ exports.registrasi = ((req, res)=>{
                 });
             // jika email sudah terdaftar maka jalankan perintah else               
             } else { 
-                response.ok('Maaf, Email sudah terdaftar');
+                response.ok('Maaf, Email sudah terdaftar', res);
             }
         }
     });
