@@ -50,3 +50,67 @@ exports.registrasi = ((req, res)=>{
         }
     });
 });
+
+// controller untuk login
+exports.login = ((req, res)=>{
+    // inputan dari body
+    let post = {
+        email : req.body.email,
+        password: req.body.password
+    }
+
+    // mengecek apakah email dan psw terdapat dalam database atau tidak
+    let query = 'SELECT * FROM ?? WHERE ??=? AND ??=?';
+    let table = ['user', 'email', post.email, 'password', md5(post.password)];
+
+    query = mysql.format(query, table); // menjalankan variabel query, table
+
+    connection.query(query, (error, rows)=>{
+        if (error) {
+            console.log(error);
+        } else {
+            if (rows.length == 1) {
+                // membuat token baru
+                let token = jwt.sign(
+                    {rows},             // rows adalah hasil select dari dari fungsi query
+                    config.secret,      // config.secret adalah untuk mengenerate isi file secret  yang terdapat pada folder config
+                    {expiresIn: 1440}   // expiresIn untuk memberikan jangka waktu token tersebut aktif
+                ); 
+
+                // user_id terdapat pada table akses_token 
+                user_id = rows[0].id_user; // id_user terdapat pada tabel user
+                
+                // variabel ini akan dimasukan kedalam database jika user berhasil login
+                let data = {
+                    user_id: user_id,
+                    access_token: token,
+                    ip_address: ip.address()
+                }
+
+                // perintah untuk menginputkan data baru
+                let query = 'INSERT INTO ?? SET ?';
+                let table = ['akses_token'];
+
+                query = mysql.format(query, table);
+
+                connection.query(query, data, (error, rows)=>{
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        res.json({
+                            "success": true,
+                            "message": "Token tergenerate",
+                            "token": token,
+                            "currUser": data.user_id
+                        })
+                    }
+                })
+            } else {
+                res.json({
+                    'Error': true,
+                    'Massage': "Email atau password salah"
+                })
+            }
+        }
+    });
+});
