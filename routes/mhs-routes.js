@@ -33,5 +33,9 @@ module.exports = function(app){
 
 	// menampilkan halaman html
 	app.route('/laporan')
-		.get(jsonku.laporan);
+		.get(jsonku.laporan); 
+
+	// mengambil data dari database irigasi
+	app.route('/api/irigasi')
+		.get(jsonku.irigasi);
 };

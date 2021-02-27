@@ -96,3 +96,14 @@ exports.jsonGroup = function(req, res){
 exports.laporan = function(req, res){
 	res.sendfile('index1.html');
 };
+
+// mengambil data dari database irigasi
+exports.irigasi = ((req, res)=>{
+	connection.query('SELECT id, ketinggian, kelembaban, keterangan, waktu_pompa, date_format(tanggal_waktu,"%d-%m-%Y, %h:%m:%s") as tanggal_waktu, tanggal, waktu FROM temp', (error, rows, fields)=>{
+		if (error) {
+			console.log(error)
+		} else {
+			response.ok(rows, res);
+		}
+	});
+});
